@@ -1,0 +1,72 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.customerapi.mapper.CustomerMapper">
+
+    <resultMap id="CustomerResultMap" type="Customer">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="address" column="address"/>
+        <result property="customerCode" column="customer_code"/>
+        <result property="active" column="active"/>
+    </resultMap>
+
+    <sql id="baseColumns">
+        id, name, email, phone, address, customer_code, active
+    </sql>
+
+    <select id="findAll" resultMap="CustomerResultMap">
+        SELECT <include refid="baseColumns"/>
+        FROM customer
+        WHERE active = true
+        <if test="keyword != null and keyword != ''">
+            AND (name LIKE CONCAT('%', #{keyword}, '%')
+              OR email LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        ORDER BY id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*)
+        FROM customer
+        WHERE active = true
+        <if test="keyword != null and keyword != ''">
+            AND (name LIKE CONCAT('%', #{keyword}, '%')
+              OR email LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+    </select>
+
+    <select id="findById" resultMap="CustomerResultMap">
+        SELECT <include refid="baseColumns"/>
+        FROM customer
+        WHERE id = #{id}
+          AND active = true
+    </select>
+
+    <insert id="insert" parameterType="Customer" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO customer (name, email, phone, address, customer_code, active)
+        VALUES (#{name}, #{email}, #{phone}, #{address}, #{customerCode}, #{active})
+    </insert>
+
+    <update id="update" parameterType="Customer">
+        UPDATE customer
+        SET name    = #{name},
+            email   = #{email},
+            phone   = #{phone},
+            address = #{address}
+        WHERE id = #{id}
+    </update>
+
+    <update id="deactivate">
+        UPDATE customer
+        SET active = false
+        WHERE id = #{id}
+    </update>
+
+    <select id="countActive" resultType="long">
+        SELECT COUNT(*) FROM customer WHERE active = true
+    </select>
+
+</mapper>
