@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS customer;
+CREATE TABLE customer (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(20) NOT NULL,
+  address VARCHAR(20) NOT NULL,
+  customer_code VARCHAR(20) NOT NULL,
+  active BOOLEAN NOT NULL,
+  PRIMARY KEY (id)
+);
