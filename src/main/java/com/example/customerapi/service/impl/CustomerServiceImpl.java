@@ -55,7 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponse createCustomer(CustomerCreateRequest request) {
+    public synchronized CustomerResponse createCustomer(CustomerCreateRequest request) {
         customerValidator.validateForCreate(request);
 
         long count = customerMapper.countActive();
