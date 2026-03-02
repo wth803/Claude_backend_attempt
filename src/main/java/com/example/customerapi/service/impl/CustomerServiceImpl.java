@@ -30,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
         Map<String, Object> params = new HashMap<>();
         params.put("keyword", (keyword != null && !keyword.isBlank()) ? keyword : null);
         params.put("limit", size);
-        params.put("offset", (long) (page - 1) * size);
+        params.put("offset", ((long) page - 1) * size);
 
         long total = customerMapper.countAll(params);
         List<CustomerResponse> data = customerMapper.findAll(params).stream()
